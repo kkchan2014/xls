@@ -66,6 +66,14 @@ func (xf *XfRk) String(wb *WorkBook) string {
 					strings.Contains(formatterLower, "д.г") {
 					//If format contains # or .00 then this is a number
 					return xf.Rk.String()
+				} else if formatterLower != "" && formatterLower == strings.Repeat("0", len(formatterLower)) {
+					// 适配 0* 数字格式化
+					i, f, isFloat := xf.Rk.number()
+					if !isFloat {
+						f = float64(i)
+					}
+
+					return fmt.Sprintf("%0*d", len(formatterLower), int32(f))
 				} else {
 					i, f, isFloat := xf.Rk.number()
 					if !isFloat {
